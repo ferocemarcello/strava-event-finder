@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Strava Event Finder</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <span class="logo">&#127937; Strava Event Finder</span>
+      <div id="auth-area"></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Landing / logged-out state -->
+    <section id="hero" class="hidden">
+      <h1>Find Sport Events Near You</h1>
+      <p>Discover upcoming group events from your Strava clubs, filtered by distance from any location.</p>
+      <p class="hero-note">Note: Strava's API only exposes events from clubs you're a member of.</p>
+      <a href="/auth/login" class="btn-strava">Connect with Strava</a>
+    </section>
+
+    <!-- Search form (logged-in state) -->
+    <section id="search-section" class="hidden">
+      <h2>Search for Events</h2>
+      <div class="search-form">
+        <div class="location-row">
+          <div class="autocomplete-wrap">
+            <input
+              type="text"
+              id="location-input"
+              placeholder="Type a city, or click the map"
+              autocomplete="off"
+            />
+            <ul id="location-suggestions" class="suggestions-list hidden"></ul>
+          </div>
+          <button id="geolocate-btn" title="Use my current location">&#127759; Use my location</button>
+        </div>
+
+        <div id="location-map"></div>
+
+        <div class="radius-row">
+          <label for="radius-slider">Within <strong id="radius-label">25 km</strong></label>
+          <input type="range" id="radius-slider" min="1" max="200" step="1" value="25" />
+          <button id="search-btn" class="btn-primary">Search</button>
+        </div>
+      </div>
+      <p id="location-status" class="status-msg"></p>
+    </section>
+
+    <!-- Results -->
+    <section id="results-section" class="hidden">
+      <div class="results-toolbar">
+        <h2 id="results-title">Upcoming Events</h2>
+        <div class="filter-sort-bar">
+          <div class="filter-group">
+            <label for="filter-sport">Sport</label>
+            <select id="filter-sport"><option value="">All</option></select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-length">Length</label>
+            <select id="filter-length">
+              <option value="">Any</option>
+              <option value="0-5">Under 5 km</option>
+              <option value="5-10">5 – 10 km</option>
+              <option value="10-21">10 – 21 km</option>
+              <option value="21-999">21 km +</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-date-from">From</label>
+            <input type="date" id="filter-date-from" />
+          </div>
+          <div class="filter-group">
+            <label for="filter-date-to">To</label>
+            <input type="date" id="filter-date-to" />
+          </div>
+          <div class="filter-group">
+            <label for="sort-by">Sort</label>
+            <select id="sort-by">
+              <option value="date">Date (soonest)</option>
+              <option value="distance">Distance from you</option>
+              <option value="length">Event length</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div id="events-grid"></div>
+      <p id="no-results" class="hidden no-results-msg">No upcoming events match your filters.</p>
+    </section>
+
+    <!-- Loading spinner -->
+    <div id="loading" class="hidden">
+      <div class="spinner"></div>
+      <p>Searching for events near you&hellip;</p>
+    </div>
+
+    <!-- Error message -->
+    <p id="error-msg" class="hidden error-msg"></p>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
